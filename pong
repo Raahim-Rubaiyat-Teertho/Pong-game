@@ -1,0 +1,116 @@
+import pygame
+from sys import exit
+
+pygame.init()
+clock = pygame.time.Clock()
+width = 800
+height = 500
+
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Pong")
+
+test_font = pygame.font.Font("C:\\Users\\DELL\\Desktop\\UltimatePygameIntro-main\\UltimatePygameIntro-main\\font\\Pixeltype.ttf", 50)
+
+player_one = pygame.Rect(0, height/2 - 60, 18, 90)
+player_two = pygame.Rect(width-18, height/2 - 70, 18, 90)
+ball = pygame.Rect(width/2 - 9, height/2 -18, 20, 20)
+
+ball_speed_x = 5
+ball_speed_y = 5
+
+game_message = test_font.render("Press Spacebar to Start Game", False, "Black")
+game_message_rect = game_message.get_rect(center = (width/2, height/2))
+
+one_won = test_font.render("Right Won!", False, "Black")
+one_won_rect = one_won.get_rect(center = (width/2, height/2))
+
+two_won = test_font.render("Left Won!", False, "Black")
+two_won_rect = two_won.get_rect(center = (width/2, height/2))
+
+play_again = test_font.render("Press Spacebar to play again.", False, "Black")
+play_again_rect = play_again.get_rect(center = (width/2, 350))
+
+game_active = False
+
+while(True):
+    for event in pygame.event.get():
+        if(event.type == pygame.QUIT):
+            pygame.quit()
+            exit()
+    if(game_active == True):
+        screen.fill('white')
+        pygame.draw.line(screen, 'Black', (width/2, 0), (width/2, height), width = 2)
+        pygame.draw.rect(screen, "Black", player_one, width = 2, border_radius=3)
+        pygame.draw.rect(screen, 'Black', player_two, width = 2, border_radius = 3)
+        pygame.draw.ellipse(screen, "Black", ball, width = 2)
+
+        pressed = pygame.key.get_pressed()
+        #player one movement
+        if(pressed[pygame.K_w]):
+            if(player_one.top < 5):
+                player_one.y += 0
+
+            else:
+                player_one.y -= 4
+
+
+        if(pressed[pygame.K_s]):
+            if(player_one.bottom > (height-4)):
+                player_one.y -= 0
+
+            else:
+                player_one.y += 4
+
+        #player two movement
+        if(pressed[pygame.K_UP]):
+            if(player_two.top < 5):
+                player_two.y += 0
+
+            else:
+                player_two.y -= 4
+
+        if(pressed[pygame.K_DOWN]):
+            if(player_two.bottom > (height-3)):
+                player_two.y -= 0
+
+            else:
+                player_two.y += 4
+
+        ball.x += ball_speed_x
+        ball.y += ball_speed_y
+
+        if(ball.top <= 0 or ball.bottom >= height):
+            ball_speed_y *= -1
+
+        if(ball.left <= 0):
+            screen.fill("White")
+            screen.blit(one_won, one_won_rect)
+            screen.blit(play_again, play_again_rect)
+            
+            if(pressed[pygame.K_SPACE]):
+                ball.x = width/2 - 9
+                ball.y = height/2 -18
+
+        if(ball.right >= width):
+            screen.fill("White")
+            screen.blit(two_won, two_won_rect)
+            screen.blit(play_again, play_again_rect)
+            
+            if(pressed[pygame.K_SPACE]):
+                ball.x = width/2 - 9
+                ball.y = height/2 -18
+            
+        if(ball.colliderect(player_one) or ball.colliderect(player_two)):
+            ball_speed_x *= -1
+
+    else:
+        screen.fill("White")
+        screen.blit(game_message, game_message_rect)
+
+        pressed = pygame.key.get_pressed()
+
+        if(pressed[pygame.K_SPACE]):
+            game_active = True
+        
+    pygame.display.update()
+    clock.tick(60)
