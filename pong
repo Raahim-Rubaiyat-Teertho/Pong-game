@@ -91,6 +91,12 @@ while(True):
                 ball.x = width/2 - 9
                 ball.y = height/2 -18
 
+                player_one.x = 0
+                player_one.y = (height/2) - 60
+
+                player_two.x = width - 18
+                player_two.y = (height/2) - 70
+
         if(ball.right >= width):
             screen.fill("White")
             screen.blit(two_won, two_won_rect)
@@ -99,6 +105,9 @@ while(True):
             if(pressed[pygame.K_SPACE]):
                 ball.x = width/2 - 9
                 ball.y = height/2 -18
+
+                player_one.x = 0
+                player_one.y = (height/2) - 60
             
         if(ball.colliderect(player_one) or ball.colliderect(player_two)):
             ball_speed_x *= -1
